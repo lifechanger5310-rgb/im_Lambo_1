@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+:root {
+  --color-void: #0a0a0b;
+  --color-panel: #17171a;
+  --color-panel-raised: #202024;
+  --color-venom: #f5c400;
+  --color-venom-dim: #8a7200;
+  --color-off-white: #eaeae7;
+  --color-mid-gray: #6b6b6f;
+  --color-redline: #ff3b1f;
+
+  --font-display: "Anton", "Arial Narrow", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html,
+body {
+  background: var(--color-void);
+  color: var(--color-off-white);
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-venom {
+  color: var(--color-venom);
+}
+
+.bg-void {
+  background-color: var(--color-void);
+}
+
+.bg-panel {
+  background-color: var(--color-panel);
+}
+
+.border-venom {
+  border-color: var(--color-venom);
+}
+
+/* Signature: cracked-open display type used in the hero */
+.crack-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.crack-heading .crack-top,
+.crack-heading .crack-bottom {
+  display: block;
+  overflow: hidden;
+}
+
+.noise-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.scanline {
+  position: relative;
+}
+
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(245, 196, 0, 0.04) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+::selection {
+  background: var(--color-venom);
+  color: var(--color-void);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-venom-dim);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-venom);
+  outline-offset: 3px;
+}
