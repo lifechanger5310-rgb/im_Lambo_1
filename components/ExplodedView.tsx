@@ -1,8 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 import { gsap } from "../lib/gsapSetup";
-import CarSilhouette from "./CarSilhouette";
+import type { CarProgress } from "./car3d/CarModel";
+
+const CarScene = dynamic(() => import("./car3d/CarScene"), { ssr: false });
 
 const PARTS = [
   {
@@ -39,20 +42,32 @@ const PARTS = [
 
 export default function ExplodedView() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const carProgress = useRef<CarProgress>({ rotation: 0.6, explode: 0 });
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.set(".exploded-part", { opacity: 0 });
+      const proxy = { explode: 0 };
 
       gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 70%",
-          end: "top 20%",
+          end: "top 10%",
           scrub: 0.5,
         },
       })
-        .to(".exploded-car", { scale: 0.72, ease: "power2.out" }, 0)
+        .to(
+          proxy,
+          {
+            explode: 1,
+            ease: "power2.out",
+            onUpdate: () => {
+              carProgress.current.explode = proxy.explode;
+            },
+          },
+          0
+        )
         .to(
           ".exploded-part",
           {
@@ -81,8 +96,8 @@ export default function ExplodedView() {
       </h2>
 
       <div className="relative w-full max-w-5xl mx-auto min-h-[70vh]">
-        <div className="exploded-car absolute inset-0 flex items-center justify-center">
-          <CarSilhouette className="w-full h-auto max-w-3xl" fillOpacity={0.1} />
+        <div className="exploded-car absolute inset-0">
+          <CarScene progressRef={carProgress} className="w-full h-full" cameraPosition={[2.6, 1.3, 5.4]} fov={30} />
         </div>
 
         {PARTS.map((part) => (

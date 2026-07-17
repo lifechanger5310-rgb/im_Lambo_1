@@ -26,15 +26,28 @@ Visit http://localhost:3000
 npm run build
 ```
 
+## 3D engine
+Hero, the 360° Showcase, and the Exploded Engineering View now render a
+real WebGL car (`components/car3d/CarModel.tsx` + `CarScene.tsx`, built
+with `@react-three/fiber` + `@react-three/drei` + `three`), not a flat
+SVG — reflective showroom floor, real lighting rig, and a single shared
+model whose parts (monocoque, hybrid powertrain, battery pack, active
+aero wing, carbon-ceramic brake/wheel assemblies) can rotate on scroll
+(Showcase360) or separate on scroll (ExplodedView). All three car
+components are dynamically imported with `ssr: false` since WebGL can't
+render on the server.
+
+The car itself is stylized low-poly geometry (boxes/cylinders/roundboxes),
+not a licensed or scanned Lamborghini model — safe to ship, but a step up
+from photoreal would mean importing a real `.glb` model (via
+`useGLTF` from drei) in place of `CarModel`'s primitives.
+
 ## Known placeholders — swap before launch
-All car imagery is an abstract SVG blueprint silhouette
-(`components/CarSilhouette.tsx`), not real photography/renders — there
-was no source photography or render asset provided for the brief. Before
-launch, replace:
-- `CarSilhouette` usage across Hero, Showcase360, ExplodedView, Gallery,
-  FinalCTA with real photography, 3D renders, or a real scroll-scrubbed
-  frame sequence for the 360° section
-- `Gallery.tsx` tile images
+- `Gallery.tsx` and `FinalCTA.tsx` still use the flat SVG
+  (`components/CarSilhouette.tsx`) rather than the 3D scene — kept
+  intentionally, since stacking many WebGL canvases on one page hurts
+  scroll performance. Swap for real photography or a render if this
+  becomes a real launch.
 - `Interior.tsx` cockpit render placeholder
 - Copy/specs are illustrative (invented for this fictional car) — replace
   with real figures if this becomes a real product brief

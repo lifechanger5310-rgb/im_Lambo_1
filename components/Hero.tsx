@@ -1,11 +1,15 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 import { gsap } from "../lib/gsapSetup";
-import CarSilhouette from "./CarSilhouette";
+import type { CarProgress } from "./car3d/CarModel";
+
+const CarScene = dynamic(() => import("./car3d/CarScene"), { ssr: false });
 
 export default function Hero() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const carProgress = useRef<CarProgress>({ rotation: 0.5, explode: 0 });
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -94,8 +98,8 @@ export default function Hero() {
         </p>
       </div>
 
-      <div className="hero-car relative z-10 mt-10 md:mt-16 px-4">
-        <CarSilhouette className="w-full h-auto max-h-[42vh]" fillOpacity={0.12} />
+      <div className="hero-car relative z-10 mt-10 md:mt-16 px-4 h-[42vh] min-h-[280px]">
+        <CarScene progressRef={carProgress} idleSpin className="w-full h-full" cameraPosition={[3.6, 1.1, 4.4]} fov={30} />
       </div>
 
       <div className="relative z-10 px-6 md:px-10 pb-10 grid grid-cols-3 md:flex md:gap-16 gap-4 border-t border-white/10 pt-6">

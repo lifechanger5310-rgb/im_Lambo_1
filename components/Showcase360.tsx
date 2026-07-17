@@ -1,14 +1,17 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "../lib/gsapSetup";
-import CarSilhouette from "./CarSilhouette";
+import type { CarProgress } from "./car3d/CarModel";
+
+const CarScene = dynamic(() => import("./car3d/CarScene"), { ssr: false });
 
 const ANGLE_LABELS = ["FRONT 3/4", "SIDE PROFILE", "REAR 3/4", "REAR", "SIDE PROFILE", "FRONT"];
 
 export default function Showcase360() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const carRef = useRef<HTMLDivElement>(null);
+  const carProgress = useRef<CarProgress>({ rotation: 0, explode: 0 });
   const [angleIndex, setAngleIndex] = useState(0);
 
   useEffect(() => {
@@ -16,7 +19,7 @@ export default function Showcase360() {
       const proxy = { rotation: 0 };
 
       gsap.to(proxy, {
-        rotation: 360,
+        rotation: Math.PI * 2,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -33,9 +36,7 @@ export default function Showcase360() {
           },
         },
         onUpdate: () => {
-          if (carRef.current) {
-            carRef.current.style.transform = `rotateY(${proxy.rotation}deg) rotateX(6deg)`;
-          }
+          carProgress.current.rotation = proxy.rotation;
         },
       });
     }, sectionRef);
@@ -69,17 +70,8 @@ export default function Showcase360() {
         </div>
       </div>
 
-      <div
-        style={{ perspective: "1400px" }}
-        className="w-full max-w-3xl px-10"
-      >
-        <div
-          ref={carRef}
-          style={{ transformStyle: "preserve-3d" }}
-          className="will-change-transform"
-        >
-          <CarSilhouette className="w-full h-auto" showGrid fillOpacity={0.1} />
-        </div>
+      <div className="w-full max-w-3xl px-10 h-[52vh] min-h-[320px]">
+        <CarScene progressRef={carProgress} className="w-full h-full" cameraPosition={[0, 1.05, 5.4]} fov={26} />
       </div>
 
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-widest text-[#7a7a7e]">
