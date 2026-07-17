@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "../lib/gsapSetup";
+import InteriorHUD from "./InteriorHUD";
 
 const DETAILS = [
   { label: "Seats", spec: "Carbon-shell, 6-point harness ready" },
@@ -45,9 +46,8 @@ export default function Interior() {
       <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center max-w-6xl mx-auto">
         <div className="interior-panel relative aspect-[4/3] bg-panel border border-white/10 flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(245,196,0,0.10),transparent_60%)]" />
-          <div className="relative font-mono text-[10px] uppercase tracking-widest text-[#6b6b6f] text-center px-6">
-            [ Interior render placeholder — swap for real cockpit photography ]
-            <div className="mt-3 text-venom text-xs">DRIVE MODE: APEX</div>
+          <div className="relative w-full h-full p-6">
+            <InteriorHUD />
           </div>
         </div>
 
